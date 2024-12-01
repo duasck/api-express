@@ -3,8 +3,13 @@ const router = express.Router();
 const usuarioRepository = require('../repositories/usuarioRepository');
 
 // Get all users
-router.get('/', (req, res) => {
-  res.json({ usuarios: usuarioRepository.findAll() });
+router.get('/', async (req, res) => {
+ try {
+    const users = await usuarioRepository.findAll();
+    res.json({ users });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
 });
 
 // Get user by id
