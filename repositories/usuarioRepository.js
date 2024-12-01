@@ -33,6 +33,15 @@ async function update(id, { nome, email, senha }) {
   return null;
 }
 
+async function authenticate(email, senha) {
+  const user = await Usuario.findOne({ where: { email } });
+  
+  if (user && user.senha === senha) {
+    return user;
+  }
+  
+  return null; 
+}
 
 
 module.exports = {
@@ -41,4 +50,5 @@ module.exports = {
   create,
   update,
   remove,
+  authenticate,
 };

@@ -48,4 +48,29 @@ router.delete('/:id', (req, res) => {
   }
 });
 
+
+
+// Authenticate a user
+router.post('/login', async (req, res) => {
+  const { email, senha } = req.body;
+
+  if (!email || !senha) {
+    return res.status(400).json({ error: 'Email e senha são obrigatórios' });
+  }
+
+  try {
+    const user = await usuarioRepository.authenticate(email, senha);
+    
+    if (user) {
+      res.json({ user }); // Retorna o usuário caso as credenciais sejam válidas
+    } else {
+      res.status(401).json({ error: 'Credenciais inválidas' });
+    }
+  } catch (error) {
+    console.error('Erro ao autenticar usuário:', error);
+    res.status(500).json({ error: 'Erro interno do servidor' });
+  }
+});
+
+
 module.exports = router;
